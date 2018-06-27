@@ -12,16 +12,29 @@ function breakAllSymbolLinks()
 
 	docRef.selection = null;
 
-	var ppLay = getPPLay(layers);
-
-
-	for(var x=0,len = ppLay.layers.length;x<len;x++)
+	for(var l = 0, len = layers.length;l<len;l++)
 	{
-		var curLay = ppLay.layers[x];
-		for(var y=0,yLen = curLay.pageItems.length;y<yLen;y++)
+		breakLinksOnCurrentGarment(layers[l]);
+	}
+
+	function breakLinksOnCurrentGarment(parentLayer)
+	{
+
+		var ppLay = getPPLay(parentLayer);
+		if(!ppLay)
 		{
-			var curItem = curLay.pageItems[y];
-			dig(curItem);
+			return;
+		}
+
+
+		for(var x=0,len = ppLay.layers.length;x<len;x++)
+		{
+			var curLay = ppLay.layers[x];
+			for(var y=0,yLen = curLay.pageItems.length;y<yLen;y++)
+			{
+				var curItem = curLay.pageItems[y];
+				dig(curItem);
+			}
 		}
 	}
 
