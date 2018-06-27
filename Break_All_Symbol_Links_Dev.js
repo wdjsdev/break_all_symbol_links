@@ -9,6 +9,7 @@ function breakAllSymbolLinks()
 	var swatches = docRef.swatches;
 	var obj = {};
 	var arr = [];
+	var curItem;
 
 	docRef.selection = null;
 
@@ -32,7 +33,7 @@ function breakAllSymbolLinks()
 			var curLay = ppLay.layers[x];
 			for(var y=0,yLen = curLay.pageItems.length;y<yLen;y++)
 			{
-				var curItem = curLay.pageItems[y];
+				curItem = curLay.pageItems[y];
 				dig(curItem);
 			}
 		}
@@ -43,6 +44,7 @@ function breakAllSymbolLinks()
 	{
 		if(item.typename === "SymbolItem")
 		{
+			item.moveToBeginning(curItem);
 			var name = item.name;
 			item.breakLink();
 			docRef.selection[0].name = name;
@@ -51,7 +53,7 @@ function breakAllSymbolLinks()
 		}
 		else if(item.typename === "GroupItem")
 		{
-			for(var x=0,len=item.pageItems.length;x<len;x++)
+			for(var x=item.pageItems.length-1;x>=0;x--)
 			{
 				dig(item.pageItems[x]);
 			}
