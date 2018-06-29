@@ -10,10 +10,11 @@ function breakAllSymbolLinks()
 	var obj = {};
 	var arr = [];
 	var curItem;
+	var curSymbols = [];
 
 	docRef.selection = null;
 
-	for(var l = 0, len = layers.length;l<len;l++)
+	for(var l = 0, masterLen = layers.length;l<masterLen;l++)
 	{
 		breakLinksOnCurrentGarment(layers[l]);
 	}
@@ -36,6 +37,12 @@ function breakAllSymbolLinks()
 				curItem = curLay.pageItems[y];
 				dig(curItem);
 			}
+			for(var y=curSymbols.length-1;y>=0;y--)
+			{
+				curSymbols[y].group.moveToBeginning(curSymbols[y].parent);
+			}
+			curSymbols = [];
+			
 		}
 	}
 
@@ -44,29 +51,30 @@ function breakAllSymbolLinks()
 	{
 		if(item.typename === "SymbolItem")
 		{
-			item.moveToBeginning(curItem);
+			// item.moveToBeginning(curItem);
 			var name = item.name;
 			item.breakLink();
 			docRef.selection[0].name = name;
 			removeHidden(docRef.selection[0]);
+			curSymbols.push({parent:curItem,group:docRef.selection[0]});
 			docRef.selection = null;
 		}
 		else if(item.typename === "GroupItem")
 		{
-			for(var x=item.pageItems.length-1;x>=0;x--)
+			for(var d=item.pageItems.length-1;d>=0;d--)
 			{
-				dig(item.pageItems[x]);
+				dig(item.pageItems[d]);
 			}
 		}
 	}
 
 	function removeHidden(group)
 	{
-		for(var x = group.pageItems.length-1;x>=0;x--)
+		for(var rh = group.pageItems.length-1;rh>=0;rh--)
 		{
-			if(group.pageItems[x].hidden)
+			if(group.pageItems[rh].hidden)
 			{
-				group.pageItems[x].remove();
+				group.pageItems[rh].remove();
 			}
 		}
 	}
