@@ -50,11 +50,11 @@ function breakAllSymbolLinks()
 				curItem = curLay.pageItems[y];
 				dig(curItem);
 			}
-			for(var y=curSymbols.length-1;y>=0;y--)
-			{
-				curSymbols[y].group.moveToBeginning(curSymbols[y].parent);
-			}
-			curSymbols = [];
+			// for(var y=curSymbols.length-1;y>=0;y--)
+			// {
+			// 	curSymbols[y].group.moveToBeginning(curSymbols[y].parent);
+			// }
+			// curSymbols = [];
 			
 		}
 	}
@@ -67,9 +67,13 @@ function breakAllSymbolLinks()
 			// item.moveToBeginning(curItem);
 			var name = item.name;
 			item.breakLink();
-			docRef.selection[0].name = name;
-			removeHidden(docRef.selection[0]);
-			curSymbols.push({parent:curItem,group:docRef.selection[0]});
+			if(docRef.selection.length)
+			{
+				docRef.selection[0].name = name;
+				removeHidden(docRef.selection[0]);
+				curSymbols.push({parent:curItem,group:docRef.selection[0]});
+			}
+			
 			docRef.selection = null;
 		}
 		else if(item.typename === "GroupItem")
