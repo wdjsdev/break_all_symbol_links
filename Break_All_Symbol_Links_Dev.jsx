@@ -32,6 +32,8 @@ function breakAllSymbolLinks()
 		breakLinksOnCurrentGarment(layers[l]);
 	}
 
+	alert("Symbol Links Successfully Broken");
+
 	function breakLinksOnCurrentGarment(parentLayer)
 	{
 
@@ -45,7 +47,8 @@ function breakAllSymbolLinks()
 		for(var x=0,len = ppLay.layers.length;x<len;x++)
 		{
 			var curLay = ppLay.layers[x];
-			for(var y=0,yLen = curLay.pageItems.length;y<yLen;y++)
+			// for(var y=0,yLen = curLay.pageItems.length;y<yLen;y++)
+			for(var y = curLay.pageItems.length - 1; y>=0; y--)
 			{
 				curItem = curLay.pageItems[y];
 				dig(curItem);
@@ -87,6 +90,10 @@ function breakAllSymbolLinks()
 
 	function removeHidden(group)
 	{
+		if(group.typename !== "GroupItem")
+		{
+			return;
+		}
 		for(var rh = group.pageItems.length-1;rh>=0;rh--)
 		{
 			if(group.pageItems[rh].hidden)
