@@ -107,13 +107,23 @@ function breakAllSymbolLinks ()
 
 	function cleanupSymbolContents ( item, dest )
 	{
-		if ( item.typename.match( /pathItem/i ) && !item.filled && !item.stroked )
+		var testItem = item;
+		if ( item.typename.match( /compound/i ) )
+		{
+			if ( !item.pathItems.length )
+			{
+				item = cleanupCompoundPath( item );
+			}
+			testItem = item.pathItems[ 0 ];
+		}
+
+		if ( testItem.typename.match( /^PathItem/ ) && !testItem.filled && !testItem.stroked )
 		{
 			item.remove();
 		}
 		else
 		{
-			item.moveToBeginning( dest );
+			item.moveToEnd( dest );
 		}
 
 	}
