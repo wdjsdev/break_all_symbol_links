@@ -6,74 +6,49 @@ function breakAllSymbolLinks ()
 
 	function getUtilities ()
 	{
+		var utilNames = [ "Utilities_Container" ]; //array of util names
+		var utilFiles = []; //array of util files
 		//check for dev mode
 		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
-		var devUtilPath = "~/Desktop/automation/utilities/";
-		var devUtils = [ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
 		function readDevPref ( dp ) { dp.open( "r" ); var contents = dp.read() || ""; dp.close(); return contents; }
-		if ( readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
+		if ( devUtilitiesPreferenceFile.exists && readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
 		{
 			$.writeln( "///////\n////////\nUsing dev utilities\n///////\n////////" );
-			return devUtils;
+			var devUtilPath = "~/Desktop/automation/utilities/";
+			utilFiles =[ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
+			return utilFiles;
 		}
 
-
-
-
-
-
-		var utilNames = [ "Utilities_Container" ];
-
-		//not dev mode, use network utilities
-		var OS = $.os.match( "Windows" ) ? "pc" : "mac";
-		var ad4 = ( OS == "pc" ? "//AD4/" : "/Volumes/" ) + "Customization/";
-		var drsv = ( OS == "pc" ? "O:/" : "/Volumes/CustomizationDR/" );
-		var ad4UtilsPath = ad4 + "Library/Scripts/Script_Resources/Data/";
-		var drsvUtilsPath = drsv + "Library/Scripts/Script_Resources/Data/";
-
-
-		var result = [];
-		for ( var u = 0, util; u < utilNames.length; u++ )
+		var dataResourcePath = customizationPath + "Library/Scripts/Script_Resources/Data/";
+		
+		for(var u=0;u<utilNames.length;u++)
 		{
-			util = utilNames[ u ];
-			var ad4UtilPath = ad4UtilsPath + util + ".jsxbin";
-			var ad4UtilFile = File( ad4UtilsPath );
-			var drsvUtilPath = drsvUtilsPath + util + ".jsxbin"
-			var drsvUtilFile = File( drsvUtilPath );
-			if ( drsvUtilFile.exists )
+			var utilFile = new File(dataResourcePath + utilNames[u] + ".jsxbin");
+			if(utilFile.exists)
 			{
-				result.push( drsvUtilPath );
+				utilFiles.push(utilFile);	
 			}
-			else if ( ad4UtilFile.exists )
-			{
-				result.push( ad4UtilPath );
-			}
-			else
-			{
-				alert( "Could not find " + util + ".jsxbin\nPlease ensure you're connected to the appropriate Customization drive." );
-				valid = false;
-			}
+			
 		}
 
-		return result;
+		if(!utilFiles.length)
+		{
+			alert("Could not find utilities. Please ensure you're connected to the appropriate Customization drive.");
+			return [];
+		}
+
+		
+		return utilFiles;
 
 	}
-
-
-
 	var utilities = getUtilities();
-
-
-
 
 	for ( var u = 0, len = utilities.length; u < len && valid; u++ )
 	{
 		eval( "#include \"" + utilities[ u ] + "\"" );
 	}
 
-	log.l( "Using Utilities: " + utilities );
-
-	if ( !valid ) return;
+	if ( !valid || !utilities.length) return;
 
 	var doc = app.activeDocument;
 	var layers = doc.layers;
