@@ -15,29 +15,29 @@ function breakAllSymbolLinks ()
 		{
 			$.writeln( "///////\n////////\nUsing dev utilities\n///////\n////////" );
 			var devUtilPath = "~/Desktop/automation/utilities/";
-			utilFiles =[ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
+			utilFiles = [ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
 			return utilFiles;
 		}
 
 		var dataResourcePath = customizationPath + "Library/Scripts/Script_Resources/Data/";
-		
-		for(var u=0;u<utilNames.length;u++)
+
+		for ( var u = 0; u < utilNames.length; u++ )
 		{
-			var utilFile = new File(dataResourcePath + utilNames[u] + ".jsxbin");
-			if(utilFile.exists)
+			var utilFile = new File( dataResourcePath + utilNames[ u ] + ".jsxbin" );
+			if ( utilFile.exists )
 			{
-				utilFiles.push(utilFile);	
+				utilFiles.push( utilFile );
 			}
-			
+
 		}
 
-		if(!utilFiles.length)
+		if ( !utilFiles.length )
 		{
-			alert("Could not find utilities. Please ensure you're connected to the appropriate Customization drive.");
+			alert( "Could not find utilities. Please ensure you're connected to the appropriate Customization drive." );
 			return [];
 		}
 
-		
+
 		return utilFiles;
 
 	}
@@ -48,7 +48,9 @@ function breakAllSymbolLinks ()
 		eval( "#include \"" + utilities[ u ] + "\"" );
 	}
 
-	if ( !valid || !utilities.length) return;
+	if ( !valid || !utilities.length ) return;
+
+	DEV_LOGGING = user === "will.dowling";
 
 	var doc = app.activeDocument;
 	var layers = doc.layers;
