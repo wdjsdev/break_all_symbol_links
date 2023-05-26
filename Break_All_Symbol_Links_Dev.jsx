@@ -94,7 +94,7 @@ function breakAllSymbolLinks ()
 			testItem = item.pathItems[ 0 ];
 		}
 
-		if ( testItem.typename.match( /^PathItem/ ) && !testItem.filled && !testItem.stroked )
+		if ( testItem.typename.match( /^PathItem/ ) && !testItem.filled && !testItem.stroked && !testItem.guides )
 		{
 			item.remove();
 		}
